@@ -235,7 +235,7 @@
 
 				// ANIMATED CHARACTER
 
-				this.player = CreateAnimatedCharacter ( 'male', 'images/male.png', 1 );
+				this.player = CreateAnimatedCharacter ( 'male', 'https://github.com/IceAquaria/Sprite3DWorld/raw/master/male.png', 1 );
 
 				// SMOOTH CAMERA
 
