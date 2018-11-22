@@ -1,222 +1,131 @@
 
-	~function ( )
-
-	{
+	~function (){
 
 		THREE = THREE || { };
 
 		/**
-		* Default parameters values
+		  * Default parameters values
 		*/
 
 		var _defaultParams = 
 
 		{
 
-			camera : null, 
-
-				target : null, 
-
-					lerp : 1.0, 
-
-						moveSpeed : 200, 
-
-					rotateSpeed : ( Math.PI / 2 ), 
-
-				offset : new THREE.Vector3 ( 0.0, 50.0, 200.0 ), 
-
-			keyMapping : 'qwerty'
+			camera : null, target : null, lerp : 1.0, 
+			moveSpeed : 200, rotateSpeed : ( Math.PI / 2.0 ), 
+			offset : new THREE.Vector3 ( 0.0, 50.0, 200.0 ), 
+			keyMapping: 'qwerty', 
 
 		};
 
 		/**
-		* Keys mappings
+		  * Keys mappings
 		*/
 
 		var _keys = 
 
 		{
 
-			qwerty : 
+			qwerty : {
 
-			{
+				translate : { forward: "W", backward: "S", left: "Q", right: "E" }, 
+				rotate : { up : "R", down : "F", left : "A", right : "D" }, 
 
-				translate : 
+			}, 
 
-				{
+			azerty : {
 
-					forward: "W",
-
-						backward: "S",
-
-						left: "Q",
-
-					right: "E"
-
-				},
-
-				rotate : 
-
-				{
-
-					up : "R", 
-
-						down : "F", 
-
-						left : "A", 
-
-					right : "D"
-
-				}
-
-			},
-
-			azerty : 
-
-			{
-
-				translate : 
-
-				{
-
-					forward : "Z", 
-
-						backward : "S", 
-
-						left : "A", 
-
-					right : "E"
-
-				}, 
-
-				rotate : 
-
-				{
-
-					up : "R", 
-
-						down : "F", 
-
-						left : "Q", 
-
-					right : "D"
-
-				}
+				translate : { forward : "Z", backward : "S", left : "A", right : "E" }, 
+				rotate : { up : "R", down : "F", left : "Q", right : "D" }, 
 
 			}
 
-		};
+		}
 
 		/**
-		* Create controls
-		* @param Some options settings
+		  * Create controls
+		  * @param Some options settings
 		*/
 
-		THREE.ThirdPersonControls = function ( params )
-
-		{
+		THREE.ThirdPersonControls = function ( params ){
 
 			params || ( params === { } );
 
-				// check errors
+			// check errors
 
-			if ( ! params.target instanceof THREE.Object3D )
-
-			{
+			if ( ! params.target instanceof THREE.Object3D ){
 
 				return console.error ( "Invalid target" );
 
 			}
 
-			if ( ! params.camera instanceof THREE.PerspectiveCamera )
-
-			{
+			if ( ! params.camera instanceof THREE.PerspectiveCamera ){
 
 				return console.error ( "Invalid camera" );
 
 			}
 
-				// add parameters
+			// add parameters
 
-			for ( var key in _defaultParams )
-
-			{
+			for ( var key in _defaultParams ){
 
 				this [ key ] = _defaultParams [ key ];
 
 			}
 
-			for ( var key in params )
-
-			{
+			for ( var key in params ){
 
 				this [ key ] = params [ key ];
 
 			}
-			
+
 		}
 
 		/**
-		* Update controls at each frames
+		  * Update controls at each frames
 		*/
 
-		THREE.ThirdPersonControls.prototype.update = function ( delta )
-
-		{
+		THREE.ThirdPersonControls.prototype.update = function ( delta ){
 
 			var moveDistance = ( this.moveSpeed * delta );
-
 			var rotateAngle = ( this.rotateSpeed * delta );
 
 			// update translations from input
 
 			var t = _keys [ this.keyMapping ].translate;
 
-			if ( THREE.Input.isKeyPressed ( t.forward ) )
-
-			{
+			if ( THREE.Input.isKeyPressed ( t.forward ) ){
 
 				this.target.translateZ ( -moveDistance );
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( t.backward ) )
-
-			{
+			if ( THREE.Input.isKeyPressed ( t.backward ) ){
 
 				this.target.translateZ ( moveDistance );
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( t.left ) )
-
-			{
+			if ( THREE.Input.isKeyPressed ( t.left ) ){
 
 				this.target.translateX ( -moveDistance );
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( t.right ) )
-
-			{
+			if ( THREE.Input.isKeyPressed ( t.right ) ){
 
 				this.target.translateX ( moveDistance );
 
 			}
 
-				// update rotations from input
+			// update rotations from input
 
-					var r = _keys [ this.keyMapping ].rotate;
+			var r = _keys [ this.keyMapping ].rotate;
+			var rotation_matrix = new THREE.Matrix4 ( ).identity ( );
 
-				var rotation_matrix = new THREE.Matrix4 ( ).identity ( );
+			if ( THREE.Input.isKeyPressed ( r.left ) ) {
 
-			if ( THREE.Input.isKeyPressed ( r.left ) )
-
-			{
-
-				this.target.rotateOnAxis
-
-				(
+				this.target.rotateOnAxis (
 
 					new THREE.Vector3 ( 0.0, 1.0, 0.0 ), 
 
@@ -226,13 +135,9 @@
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( r.right ) )
+			if ( THREE.Input.isKeyPressed ( r.right ) ) {
 
-			{
-
-				this.target.rotateOnAxis
-
-				(
+				this.target.rotateOnAxis (
 
 					new THREE.Vector3 ( 0.0, 1.0, 0.0 ), 
 
@@ -242,13 +147,9 @@
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( r.up ) )
+			if ( THREE.Input.isKeyPressed ( r.up ) ) {
 
-			{
-
-				this.target.rotateOnAxis
-
-				(
+				this.target.rotateOnAxis (
 
 					new THREE.Vector3 ( 1.0, 0.0, 0.0 ), 
 
@@ -258,13 +159,9 @@
 
 			}
 
-			if ( THREE.Input.isKeyPressed ( r.down ) )
+			if ( THREE.Input.isKeyPressed ( r.down ) ) {
 
-			{
-
-				this.target.rotateOnAxis
-
-				(
+				this.target.rotateOnAxis (
 
 					new THREE.Vector3 ( 1.0, 0.0, 0.0 ), 
 
@@ -274,26 +171,26 @@
 
 			}
 
-				// place camera
+			// place camera
 
-					var relativeCameraOffset = new THREE.Vector3 ( 0.0, 5.0, 100.0 );
+			var relativeCameraOffset = new THREE.Vector3 ( 0.0, 5.0, 100.0 );
 
-					var cameraOffset = relativeCameraOffset.applyMatrix4 ( this.target.matrixWorld );
+			var cameraOffset = relativeCameraOffset.applyMatrix4 ( this.target.matrixWorld );
 
-				this.camera.position.lerp
+			this.camera.position.lerp (
+
+				cameraOffset.clone ( ), 
 
 				(
 
-					cameraOffset.clone ( ), 
+					( this.lerp * 100 ) * delta
 
-					( ( this.lerp * 100 ) * delta )
+				)
 
-				);
+			);
 
 			this.camera.lookAt ( this.target.position );
 
 		}
 
-	} ( );
-
-
+	}();
